@@ -46,13 +46,13 @@ const SideBar = ({highlight}:{highlight:number}) => {
                             <p>Home</p>
                         </div>
                         <div
-                            onClick={()=> router.push('/notes')}
+                            onClick={()=> router.push('/view-note')}
                             className={`w-full ${highlight==2 ? 'bg-gray-300' : ''} rounded-lg flex items-center gap-4 px-4 py-3 cursor-pointer`}>
                             <Image src="note.svg" alt="edit" width={20} height={20}/>
                             <p>Notes</p>
                         </div>
                         <div
-                            onClick={()=> router.push('/files')}
+                            onClick={()=> router.push('/view-files')}
                             className={`w-full ${highlight==3 ? 'bg-gray-300' : ''} rounded-lg flex items-center gap-4 px-4 py-3 cursor-pointer`}>
                             <Image src="link.svg" alt="edit" width={25} height={25}/>
                             <p>Files</p>
