@@ -2,7 +2,7 @@
 import Image from "next/image";
 import {useRouter} from "next/navigation";
 
-const Side_bar = ({highlight}:{highlight:number}) => {
+const SideBar = ({highlight}:{highlight:number}) => {
     const router = useRouter();
     return (
         <>
@@ -74,4 +74,4 @@ const Side_bar = ({highlight}:{highlight:number}) => {
     )
 
 }
-export default Side_bar;
+export default SideBar;

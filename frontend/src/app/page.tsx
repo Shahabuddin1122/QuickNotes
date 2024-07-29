@@ -1,12 +1,12 @@
 import Image from "next/image";
-import Side_bar from "@/components/side_bar";
 import Button from "@/components/Button";
+import SideBar from "@/components/side_bar";
 
 export default function Home() {
     return (
         <>
             <div className="w-full h-screen flex">
-                <Side_bar highlight={1}/>
+                <SideBar highlight={1}/>
                 <div className={"w-5/6 h-full flex justify-center items-center border"}>
                     <div className={"w-1/3 h-1/2 flex flex-col justify-center"}>
                         <div className={"py-10"}>
