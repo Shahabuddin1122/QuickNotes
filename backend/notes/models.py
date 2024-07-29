@@ -9,5 +9,5 @@ class Notes(models.Model):
 
 
 class Note_Attachment(models.Model):
-    note = models.ForeignKey(Notes, on_delete=models.CASCADE)
+    note = models.ForeignKey(Notes, related_name='attachments', on_delete=models.CASCADE)
     image = models.TextField()
