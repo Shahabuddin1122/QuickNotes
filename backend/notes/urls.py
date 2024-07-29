@@ -7,4 +7,5 @@ urlpatterns = [
     path('get-notes', views.get_all_notes, name='get_all_notes'),
     path('get-individual-note/<int:note_id>', views.get_individual_notes, name='get_individual_notes'),
     path('update-notes/<int:note_id>', views.update_notes, name='update_notes'),
+    path('delete-note/<int:note_id>', views.delete_individual_notes, name='delete_individual_notes'),
 ]
