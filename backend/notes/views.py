@@ -1,5 +1,6 @@
 import base64
 
+from django.utils import timezone
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -15,6 +16,7 @@ def add_notes(request):
         notes = Notes.objects.create(
             title=data.get('title', data['title']),
             description=data.get('description', data['description']),
+            date=timezone.now(),
             favorite=False
         )
 
@@ -70,6 +72,7 @@ def update_notes(request, note_id):
             if hasattr(note, field):
                 setattr(note, field, value)
 
+        note.date = timezone.now()
         note.save()
         serializer = NoteSerializer(note)
         return Response(serializer.data, status=status.HTTP_200_OK)
