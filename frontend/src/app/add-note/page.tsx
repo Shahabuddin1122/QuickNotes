@@ -14,11 +14,21 @@ const Page = () => {
         description: "",
         title: ""
     })
+    const [image,setImage] = useState<File | null>()
     const mutation = useMutation(() =>
-        fetcher({ queryKey: ['notes', 'http://localhost:8000/note/add-note'], method: 'POST', body: data })
+        fetcher({ queryKey: ['notes', 'http://localhost:8000/note/add-note'], method: 'POST', body: formData })
     );
+    const storeImage = (value)=>{
+        setImage(value)
+    }
 
+    const formData = new FormData();
     const submitData = () => {
+        formData.append("title", data.title);
+        formData.append("description", data.description);
+        if (image) {
+            formData.append("attachment", image);
+        }
         mutation.mutate();
         router.push('/')
     };
@@ -67,7 +77,7 @@ const Page = () => {
                         </div>
                         <div className="py-2">
                             <p className="text-lg py-2 font-bold tracking-wide">Attachment</p>
-                            <Image_upload/>
+                            <Image_upload storeImage={storeImage}/>
                         </div>
                     </div>
                     <Button text="Add" submitData={submitData} />
