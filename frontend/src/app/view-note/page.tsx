@@ -7,7 +7,17 @@ import fetcher from "@/utils/fetcher";
 
 const Page = () => {
     const [toggleButton,setToggleButton] = useState<number>(0)
-    const { data, isLoading, error } = useQuery(['notes', 'http://localhost:8000/note/get-notes'], fetcher);
+    const { data, isLoading, error } = useQuery(
+        ['notes', 'http://localhost:8000/note/get-notes'],
+        fetcher,
+        {
+            staleTime: 1000,
+            cacheTime: 1000 * 60 * 5,
+            refetchOnWindowFocus: true,
+            refetchInterval: 1000,
+            refetchOnReconnect: true
+        }
+    );
   return (
       <>
           <div className={"w-full h-screen flex"}>

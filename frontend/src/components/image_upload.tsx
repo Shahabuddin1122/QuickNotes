@@ -2,15 +2,15 @@
 import {useRef, useState} from "react";
 import Image from "next/image";
 
-const Image_upload = () => {
-    const [selectedImage, setSelectedImage] = useState<string | null>(null);
+const Image_upload = ({storeImage}:{storeImage:(value:File)=> void}) => {
+    const [selectedImage, setSelectedImage] = useState<File>();
     const fileInputRef = useRef<HTMLInputElement | null>(null);
 
     const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event?.target?.files[0]) {
             const file = event?.target?.files[0];
-            const imageUrl = URL.createObjectURL(file);
-            setSelectedImage(imageUrl);
+            setSelectedImage(file);
+            storeImage(file)
         }
     };
 
@@ -27,7 +27,7 @@ const Image_upload = () => {
           >
               {selectedImage ? (
                   <img
-                      src={selectedImage}
+                      src={URL.createObjectURL(selectedImage)}
                       alt="Uploaded"
                       className="object-contain h-full w-full rounded-lg"
                   />
