@@ -4,8 +4,12 @@ import SideBar from "@/components/side_bar";
 import Image_upload from "@/components/image_upload";
 import Image from "next/image";
 import {useEffect, useRef, useState} from "react";
+import {useQuery} from "react-query";
+import fetcher from "@/utils/fetcher";
 
-const Page = () => {
+const Page = ({params}) => {
+    const id = params.id;
+    const { data, isLoading, error } = useQuery(['individual-note', `http://localhost:8000/note/get-individual-note/${id}`], fetcher);
     const [isEditing, setIsEditing] = useState<boolean>(false);
     const [isEditing2, setIsEditing2] = useState<boolean>(false);
     const inputRef = useRef<HTMLInputElement | null>(null);
@@ -45,7 +49,7 @@ const Page = () => {
                                         className="w-full h-full font-semibold focus:outline-none"
                                     />
                                 ) : (
-                                    <p className="font-semibold">Property Listing</p>
+                                    <p className="font-semibold">{data && data.title}</p>
                                 )}
                             </div>
                         </div>
@@ -59,35 +63,11 @@ const Page = () => {
                             <div className="w-1/2 py-4 px-4 rounded-lg border-black border">
                                 {isEditing2 ? (
                                     <textarea
-                                        value={"Property ID: 12345\n" +
-                                            "Address: 789 Oak Street, Springfield, IL, 62704\n" +
-                                            "Property Type: Single Family Home\n" +
-                                            "Listing Date: July 29, 2024\n" +
-                                            "Price: $350,000\n" +
-                                            "Bedrooms: 4\n" +
-                                            "Bathrooms: 3\n" +
-                                            "Square Footage: 2,500 sq. ft.\n" +
-                                            "Lot Size: 0.5 acres\n" +
-                                            "Year Built: 2010\n" +
-                                            "Listing Agent: Jane Doe\n" +
-                                            "Agent Contact: (555) 123-4567 |\n" +
-                                            " jane.doe@example.com"}
+                                        value={data && data.description}
                                         className="w-full h-full font-semibold focus:outline-none min-h-[300px]"
                                     />
                                 ) : (
-                                    <p className="font-semibold">Property ID: 12345 <br/>
-                                        Address: 789 Oak Street, Springfield, IL, 62704 <br/>
-                                        Property Type: Single Family Home <br/>
-                                        Listing Date: July 29, 2024 <br/>
-                                        Price: $350,000 <br/>
-                                        Bedrooms: 4 <br/>
-                                        Bathrooms: 3 <br/>
-                                        Square Footage: 2,500 sq. ft. <br/>
-                                        Lot Size: 0.5 acres <br/>
-                                        Year Built: 2010 <br/>
-                                        Listing Agent: Jane Doe <br/>
-                                        Agent Contact: (555) 123-4567 |<br/>
-                                        jane.doe@example.com</p>
+                                    <p className="font-semibold">{data && data.description}</p>
                                 )}
                             </div>
                         </div>

@@ -8,7 +8,6 @@ import fetcher from "@/utils/fetcher";
 const Page = () => {
     const [toggleButton,setToggleButton] = useState<number>(0)
     const { data, isLoading, error } = useQuery(['notes', 'http://localhost:8000/note/get-notes'], fetcher);
-    console.log(data)
   return (
       <>
           <div className={"w-full h-screen flex"}>
@@ -30,7 +29,7 @@ const Page = () => {
                       </div>
                       <div className={"w-full flex gap-10 flex-wrap justify-center"}>
                           {data && data.map((value,index)=>(
-                              <Note_card key={index} title={value.title} description={value.description} favorite={value.favorite} date={value.formatted_date} />
+                              <Note_card key={index} title={value.title} description={value.description} favorite={value.favorite} date={value.formatted_date} url={value.id} />
                           ))}
                       </div>
                   </div>
