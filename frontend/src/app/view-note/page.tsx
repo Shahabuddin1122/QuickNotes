@@ -1,12 +1,14 @@
 "use client"
 import SideBar from "@/components/side_bar";
-import Button from "@/components/Button";
 import {useState} from "react";
-import Image from "next/image";
 import Note_card from "@/components/note_card";
+import {useQuery} from "react-query";
+import fetcher from "@/utils/fetcher";
 
 const Page = () => {
     const [toggleButton,setToggleButton] = useState<number>(0)
+    const { data, isLoading, error } = useQuery(['notes', 'http://localhost:8000/note/get-notes'], fetcher);
+    console.log(data)
   return (
       <>
           <div className={"w-full h-screen flex"}>
@@ -27,10 +29,9 @@ const Page = () => {
                           </div>
                       </div>
                       <div className={"w-full flex gap-10 flex-wrap justify-center"}>
-                          <Note_card/>
-                          <Note_card/>
-                          <Note_card/>
-                          <Note_card/>
+                          {data && data.map((value,index)=>(
+                              <Note_card key={index} title={value.title} description={value.description} favorite={value.favorite} date={value.formatted_date} />
+                          ))}
                       </div>
                   </div>
               </div>
