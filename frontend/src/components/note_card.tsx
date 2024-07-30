@@ -1,6 +1,9 @@
+"use client"
 import Image from "next/image";
+import {useRouter} from "next/navigation";
 
-const Note_card = ({ title, description, favorite, attachments,date }) => {
+const Note_card = ({ title, description, favorite, attachments,date,url}) => {
+    const router = useRouter()
     const truncateDescription = (text) => {
         if (text.length > 200) {
             return text.slice(0, 200) + "...";
@@ -10,7 +13,7 @@ const Note_card = ({ title, description, favorite, attachments,date }) => {
 
     return (
         <>
-            <div className="w-1/5 border bg-amber-100 p-4 shadow-xl flex flex-col">
+            <div className="w-1/5 border bg-amber-100 p-4 shadow-xl flex flex-col cursor-pointer" onClick={()=> router.push(`/note/${url}`)}>
                 <div className="flex-grow">
                     <div className="flex justify-between">
                         <h1 className="font-bold text-xl">{title}</h1>
