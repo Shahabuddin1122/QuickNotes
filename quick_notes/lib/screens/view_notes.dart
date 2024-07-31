@@ -114,6 +114,7 @@ class _ViewNotesState extends State<ViewNotes> {
                 InputBox(
                   name: 'Title',
                   value: note.title,
+                  id: note.id,
                 ),
                 ExpandableInputBox(
                   name: 'Description',

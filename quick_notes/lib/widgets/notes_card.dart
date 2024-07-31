@@ -1,9 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:quick_notes/utils/api_sattings.dart';
 import 'package:quick_notes/utils/constants.dart';
 import 'package:quick_notes/utils/custom_theme.dart';
 
-class NotesCard extends StatelessWidget {
-  NotesCard({
+class NotesCard extends StatefulWidget {
+  const NotesCard({
     super.key,
     required this.description,
     required this.title,
@@ -16,6 +19,19 @@ class NotesCard extends StatelessWidget {
   final bool isFav;
   final int id;
 
+  @override
+  State<NotesCard> createState() => _NotesCardState();
+}
+
+class _NotesCardState extends State<NotesCard> {
+  late bool isFavLocal;
+
+  @override
+  void initState() {
+    super.initState();
+    isFavLocal = widget.isFav;
+  }
+
   String truncateText(String text) {
     List<String> words = text.split(' ');
     if (words.length > 20) {
@@ -25,6 +41,21 @@ class NotesCard extends StatelessWidget {
     return text;
   }
 
+  Future<void> updateFavorite() async {
+    Map<String, bool> data = {"favorite": !isFavLocal};
+    ApiSettings updateNotes =
+        ApiSettings(endPoint: 'note/update-notes/${widget.id}');
+    final response = await updateNotes.putMethod(jsonEncode(data));
+
+    if (response.statusCode == 200) {
+      setState(() {
+        isFavLocal = !isFavLocal;
+      });
+    } else {
+      throw Exception('Failed to update favorite status');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -32,7 +63,7 @@ class NotesCard extends StatelessWidget {
       margin: Theme.of(context).defaultPadding,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
-          color: isFav ? PRIMARY_COLOR.withOpacity(0.3) : Colors.white,
+          color: isFavLocal ? PRIMARY_COLOR.withOpacity(0.3) : Colors.white,
           border: Border.all(
             width: 0.5,
             color: Colors.black,
@@ -49,11 +80,11 @@ class NotesCard extends StatelessWidget {
                     Navigator.pushNamed(
                       context,
                       '/view-notes',
-                      arguments: id,
+                      arguments: widget.id,
                     );
                   },
                   child: Text(
-                    title,
+                    widget.title,
                     style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -74,11 +105,11 @@ class NotesCard extends StatelessWidget {
               Navigator.pushNamed(
                 context,
                 '/view-notes',
-                arguments: id,
+                arguments: widget.id,
               );
             },
             child: Text(
-              truncateText(description),
+              truncateText(widget.description),
               style: const TextStyle(
                 fontSize: 16,
               ),
@@ -89,7 +120,7 @@ class NotesCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                date,
+                widget.date,
                 style: const TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w400,
@@ -102,12 +133,16 @@ class NotesCard extends StatelessWidget {
                     size: 30,
                   ),
                   const SizedBox(width: 20),
-                  if (isFav)
-                    const Icon(
-                      Icons.star,
+                  GestureDetector(
+                    onTap: () {
+                      updateFavorite();
+                    },
+                    child: Icon(
+                      isFavLocal ? Icons.star : Icons.star_border,
                       size: 30,
-                      color: Colors.amber,
+                      color: isFavLocal ? Colors.amber : Colors.black,
                     ),
+                  ),
                 ],
               ),
             ],
