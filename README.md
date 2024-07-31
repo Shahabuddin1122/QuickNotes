@@ -1,6 +1,6 @@
 # quickNotes
 
-quickNotes is a web and mobile application for creating and managing notes efficiently. It uses Next.js for the frontend and Django for the backend.
+quickNotes is a web and mobile application for creating and managing notes efficiently. It uses Next.js for the frontend and Django for the backend and flutter for android application.
 
 ## Features
 
