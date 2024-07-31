@@ -13,7 +13,10 @@ Future<void> main() async {
     themeMode: ThemeMode.system,
     routes: {
       '/': (context) => const Home(),
-      '/view-notes': (context) => const ViewNotes(),
+      '/view-notes': (context) {
+        final int id = ModalRoute.of(context)!.settings.arguments as int;
+        return ViewNotes(id: id);
+      },
       '/add-notes': (contex) => const AddNote(),
     },
   ));

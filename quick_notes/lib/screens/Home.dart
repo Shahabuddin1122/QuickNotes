@@ -1,11 +1,40 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:quick_notes/models/notes.dart';
+import 'package:quick_notes/utils/api_sattings.dart';
 import 'package:quick_notes/utils/constants.dart';
 import 'package:quick_notes/utils/custom_theme.dart';
 import 'package:quick_notes/widgets/customer_sidebar.dart';
 import 'package:quick_notes/widgets/notes_card.dart';
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
   const Home({super.key});
+
+  @override
+  State<Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  late Future<List<Notes>> notes;
+  ApiSettings getNotes = ApiSettings(endPoint: 'note/get-notes');
+
+  @override
+  void initState() {
+    super.initState();
+    notes = fetchNotes();
+  }
+
+  Future<List<Notes>> fetchNotes() async {
+    final response = await getNotes.getMethod();
+
+    if (response.statusCode == 200) {
+      List jsonResponse = json.decode(response.body);
+      return jsonResponse.map<Notes>((note) => Notes.fromMap(note)).toList();
+    } else {
+      throw Exception('Failed to load notes');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -128,28 +157,34 @@ class Home extends StatelessWidget {
                 ),
               ),
               // Notes Cards
-              Padding(
-                padding: Theme.of(context).sectionDividerPadding,
-                child: Wrap(
-                  spacing: 10,
-                  runSpacing: 10,
-                  children: [
-                    NotesCard(
-                      title: "Property Listings",
-                      description:
-                          '''The annual company picnic will be held on August 20th at the Central Park. All employees and their families are invited. Activities include:\n\n- Games and competitions\n- BBQ lunch\n- Award ceremony\n\nPlease RSVP by August 10th.''',
-                      date: "Jun 23",
-                      isFav: false,
-                    ),
-                    NotesCard(
-                      title: "Property Listings",
-                      description:
-                          '''The annual company picnic will be held on August 20th at the Central Park. All employees and their families are invited. Activities include:\n\n- Games and competitions\n- BBQ lunch\n- Award ceremony\n\nPlease RSVP by August 10th.''',
-                      date: "Jun 23",
-                      isFav: true,
-                    ),
-                  ],
-                ),
+              FutureBuilder<List<Notes>>(
+                future: notes,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    return Center(child: Text('Error: ${snapshot.error}'));
+                  } else if (snapshot.hasData) {
+                    return Padding(
+                      padding: Theme.of(context).sectionDividerPadding,
+                      child: Wrap(
+                        spacing: 10,
+                        runSpacing: 10,
+                        children: snapshot.data!.map((note) {
+                          return NotesCard(
+                            id: note.id,
+                            title: note.title,
+                            description: note.description,
+                            date: note.formattedDate,
+                            isFav: note.favorite,
+                          );
+                        }).toList(),
+                      ),
+                    );
+                  } else {
+                    return Center(child: Text('No notes available'));
+                  }
+                },
               ),
             ],
           ),
