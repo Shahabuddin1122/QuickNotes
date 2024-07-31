@@ -3,19 +3,23 @@ import 'package:quick_notes/utils/constants.dart';
 import 'package:quick_notes/utils/custom_theme.dart';
 
 class NotesCard extends StatelessWidget {
-  NotesCard(
-      {super.key,
-      required this.description,
-      required this.title,
-      required this.date,
-      required this.isFav});
-  String title, description, date;
-  bool isFav;
+  NotesCard({
+    super.key,
+    required this.description,
+    required this.title,
+    required this.date,
+    required this.isFav,
+    required this.id,
+  });
+
+  final String title, description, date;
+  final bool isFav;
+  final int id;
 
   String truncateText(String text) {
     List<String> words = text.split(' ');
-    if (words.length > 30) {
-      words = words.sublist(0, 30);
+    if (words.length > 20) {
+      words = words.sublist(0, 20);
       return words.join(' ') + '...';
     }
     return text;
@@ -27,27 +31,33 @@ class NotesCard extends StatelessWidget {
       padding: Theme.of(context).insideCardPadding,
       margin: Theme.of(context).defaultPadding,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        color: PRIMARY_COLOR.withOpacity(0.3),
-      ),
+          borderRadius: BorderRadius.circular(20),
+          color: isFav ? PRIMARY_COLOR.withOpacity(0.3) : Colors.white,
+          border: Border.all(
+            width: 0.5,
+            color: Colors.black,
+          )),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              GestureDetector(
-                onTap: () {
-                  Navigator.pushNamed(context, '/view-notes');
-                },
-                child: Expanded(
+              Expanded(
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.pushNamed(
+                      context,
+                      '/view-notes',
+                      arguments: id,
+                    );
+                  },
                   child: Text(
                     title,
                     style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
-                    overflow: TextOverflow.ellipsis,
                     softWrap: true,
                   ),
                 ),
@@ -61,12 +71,14 @@ class NotesCard extends StatelessWidget {
           const SizedBox(height: 10),
           GestureDetector(
             onTap: () {
-              Navigator.pushNamed(context, '/view-notes');
+              Navigator.pushNamed(
+                context,
+                '/view-notes',
+                arguments: id,
+              );
             },
             child: Text(
-              truncateText(
-                description,
-              ),
+              truncateText(description),
               style: const TextStyle(
                 fontSize: 16,
               ),
