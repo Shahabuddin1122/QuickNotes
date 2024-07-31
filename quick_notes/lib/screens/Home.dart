@@ -17,7 +17,6 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   late Future<List<Notes>> notes;
-  ApiSettings getNotes = ApiSettings(endPoint: 'note/get-notes');
 
   @override
   void initState() {
@@ -26,6 +25,7 @@ class _HomeState extends State<Home> {
   }
 
   Future<List<Notes>> fetchNotes() async {
+    ApiSettings getNotes = ApiSettings(endPoint: 'note/get-notes');
     final response = await getNotes.getMethod();
 
     if (response.statusCode == 200) {
@@ -97,7 +97,7 @@ class _HomeState extends State<Home> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    Text("12 notes"),
+                    Text("5 notes"),
                   ],
                 ),
               ),

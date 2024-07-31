@@ -60,4 +60,19 @@ class ApiSettings {
       throw Exception(e.toString());
     }
   }
+
+  Future<http.Response> putMethod(String data) async {
+    try {
+      final response = await http.put(
+        Uri.parse(uri),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: data,
+      );
+      return response;
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
 }
