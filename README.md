@@ -53,3 +53,19 @@ quickNotes is a web application for creating and managing notes efficiently. It 
 
     ```bash
     python manage.py runserver
+
+### Android App Setup
+
+1. Navigate to the quick_notes directory:
+
+   ```bash
+   cd quickNotes/quick_notes
+
+2. Open the project in Android Studio.
+
+3. Ensure that all necessary SDKs and dependencies are installed.
+
+4. Configure the backend API URL in the application if needed.
+
+5. Build and run the app on an emulator or physical device.
+
